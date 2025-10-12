@@ -19,6 +19,7 @@ RUN npm install -g @nestjs/cli
 # Bundle app source
 COPY --chown=node:node . .
 
+EXPOSE 9229
 # Use the node user from the image (instead of the root user)
 USER node
 

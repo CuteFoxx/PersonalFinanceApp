@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Prisma, User } from 'generated/prisma';
@@ -46,6 +50,11 @@ export class UsersService {
   }): Promise<User> {
     const { where, data } = params;
     const { password, ...rest } = data;
+
+    const existingUser = await this.prisma.user.findUnique({ where });
+    if (!existingUser) {
+      throw new NotFoundException('User not found');
+    }
 
     let hash: string | undefined;
     const updateData: Partial<UpdateUserDto> = rest;

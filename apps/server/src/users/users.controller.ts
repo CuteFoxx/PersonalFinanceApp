@@ -6,13 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
 import { Serialize } from 'src/decorators/serialize.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 @Serialize(UserDto)
 export class UsersController {
@@ -26,11 +28,6 @@ export class UsersController {
   @Get()
   async getUsers() {
     return await this.usersService.find();
-  }
-
-  @Post()
-  async createUser(@Body() data: CreateUserDto) {
-    return await this.usersService.createUser(data);
   }
 
   @Patch(':id')
