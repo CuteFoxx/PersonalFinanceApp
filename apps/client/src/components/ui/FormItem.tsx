@@ -2,13 +2,12 @@ import type React from "react";
 import { cn } from "../../utils/utils";
 
 interface FormItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactElement[];
+  children?: React.ReactNode[];
 }
 
-const FormItem = ({ children, ...props }: FormItemProps) => {
-  const { className, ...rest } = props;
+const FormItem = ({ children, className, ...props }: FormItemProps) => {
   return (
-    <div className={cn(className, "flex flex-col gap-1")} {...rest}>
+    <div className={cn("flex flex-col gap-1", className)} {...props}>
       {children}
     </div>
   );

@@ -1,13 +1,14 @@
 import { cn } from "../../utils/utils";
-
-const Input = ({ ...props }: React.InputHTMLAttributes<HTMLInputElement>) => {
-  const { className, ...rest } = props;
+const Input = ({
+  className,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement>) => {
   return (
     <input
-      {...rest}
+      {...props}
       className={cn(
-        className,
-        "min-h-11.25 border-1 border-beige-500 rounded-lg px-5 flex flex-col justify-center items-center"
+        "min-h-11.25 border-1 border-beige-500 rounded-lg px-5 flex flex-col justify-center items-center",
+        className
       )}
     />
   );

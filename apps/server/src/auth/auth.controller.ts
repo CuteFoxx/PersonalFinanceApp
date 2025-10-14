@@ -31,6 +31,6 @@ export class AuthController {
 
   @Post('signup')
   signup(@Body() body: CreateUserDto) {
-    return this.usersService.createUser(body);
+    return this.authService.signup(body);
   }
 }

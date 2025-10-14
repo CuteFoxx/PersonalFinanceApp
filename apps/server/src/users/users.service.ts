@@ -25,7 +25,7 @@ export class UsersService {
     });
   }
 
-  async createUser(data: CreateUserDto): Promise<User> {
+  async createUser(data: CreateUserDto) {
     const { password, email, ...rest } = data;
     const userExists = await this.findOne({ email });
 
@@ -35,13 +35,17 @@ export class UsersService {
 
     const hash = await bcrypt.hash(password, 10);
 
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
         ...rest,
         password: hash,
         email,
       },
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 
   async updateUser(params: {
