@@ -9,7 +9,9 @@ import FormError from "../ui/FormError";
 import { useId } from "react";
 import PasswordInput from "../ui/PasswordInput";
 import axios from "axios";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useAppDispatch } from "../../redux/hooks";
+import { setToken } from "../../redux/userSlice";
 
 const schema = z.object({
   email: z.email(),
@@ -21,6 +23,9 @@ type FormFileds = z.infer<typeof schema>;
 const LoginForm = () => {
   const emailId = useId();
   const passwordId = useId();
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -34,7 +39,10 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<FormFileds> = (data) => {
     axios
       .post("/auth/login", data)
-      .then((res) => console.log(res.data))
+      .then((res) => {
+        dispatch(setToken(res.data.access_token));
+        navigate({ to: "/", replace: true });
+      })
       .catch((err) => setError("root", { message: err.response.data.message }));
   };
 

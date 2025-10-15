@@ -1,8 +1,14 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { store } from "../redux/store";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
-    throw redirect({ to: "/auth/login" });
+    const state = store.getState();
+    const token = state.users.accessToken;
+
+    if (!token) {
+      throw redirect({ to: "/auth/login" });
+    }
   },
   component: RouteComponent,
 });
