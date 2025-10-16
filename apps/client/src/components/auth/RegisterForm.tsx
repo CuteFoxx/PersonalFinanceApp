@@ -40,7 +40,7 @@ const RegisterForm = () => {
 
   const onSubmit: SubmitHandler<FormFileds> = (data) => {
     axios
-      .post("/auth/signup", data)
+      .post("/signup", data)
       .then((res) => {
         dispatch(setToken(res.data.access_token));
         navigate({ to: "/", replace: true });
@@ -76,7 +76,7 @@ const RegisterForm = () => {
       <Button>Login</Button>
       <div className="mx-auto text-grey-500 text-preset-4">
         Already have an account?{" "}
-        <Link to="/auth/login" className="font-bold text-grey-900 underline">
+        <Link to="/login" className="font-bold text-grey-900 underline">
           Login
         </Link>
       </div>

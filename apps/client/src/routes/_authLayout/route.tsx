@@ -1,8 +1,8 @@
+import Logo from "../../assets/logo-large.svg?react";
+import Illustration from "../../assets/illustration-authentication.svg?react";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import Logo from "../assets/logo-large.svg?react";
-import Illustration from "../assets/illustration-authentication.svg?react";
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/_authLayout")({
   component: RouteComponent,
 });
 

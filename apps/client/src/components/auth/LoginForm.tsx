@@ -69,7 +69,7 @@ const LoginForm = () => {
       <Button>Login</Button>
       <div className="mx-auto text-grey-500 text-preset-4">
         Need to create an account?{" "}
-        <Link to="/auth/signup" className="font-bold text-grey-900 underline">
+        <Link to="/signup" className="font-bold text-grey-900 underline">
           Sign Up
         </Link>
       </div>

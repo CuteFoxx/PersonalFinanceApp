@@ -35,6 +35,10 @@
   --text-preset-1--line-height: 1.2;
   --text-preset-1--font-weight: 700;
 
+  --text-preset-3: 1rem;
+  --text-preset-3--line-height: 1.5;
+  --text-preset-3--font-weight: 500;
+
   --text-preset-4: 0.875rem;
   --text-preset-4--line-height: 1.5;
   --text-preset-4--font-weight: 500;
@@ -56,4 +60,12 @@ body {
 
 .form {
   @apply bg-white py-6 px-5 rounded-xl flex flex-col gap-8 md:p-8;
+}
+
+.link {
+  @apply flex-1 pb-3.75 pt-2 items-center rounded-t-lg flex flex-col justify-center text-[0px] md:text-preset-5 font-bold gap-1 xl:-ml-6 xl:rounded-t-[0] xl:rounded-r-2xl xl:flex-row xl:gap-4.75 xl:text-preset-3 xl:py-4 xl:justify-start xl:pl-8;
+}
+
+.link.active {
+  @apply bg-beige-100  [&_path]:fill-green border-b-3 border-green text-grey-900 xl:border-b-0 xl:border-l-4;
 }
