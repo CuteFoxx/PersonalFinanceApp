@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import Logo from "../assets/logo-large.svg?react";
 import HomeIcon from "../assets/icon-nav-overview.svg?react";
 import PotsIcon from "../assets/icon-nav-pots.svg?react";
