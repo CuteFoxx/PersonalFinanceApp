@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -14,6 +15,7 @@ import { Serialize } from '../decorators/serialize.decorator';
 import { PotDto } from './dto/pot.dto';
 import { CreatePotDto } from './dto/create-pot.dto';
 import { UpdatePotDto } from './dto/update-pot.dto';
+import { DepostDto } from './dto/depost.dto';
 
 @Serialize(PotDto)
 @UseGuards(JwtAuthGuard)
@@ -44,5 +46,15 @@ export class PotsController {
   @Delete(':id')
   async deletePot(@Param('id') id: string) {
     return await this.potsService.delete({ id: parseInt(id) });
+  }
+
+  @Post(':id/withdraw')
+  async withdraw(@Param('id') id: string, @Body() data: DepostDto) {
+    return await this.potsService.withdraw({ id: parseInt(id) }, data.amount);
+  }
+
+  @Post(':id/deposit')
+  async deposit(@Param('id') id: string, @Body() data: DepostDto) {
+    return await this.potsService.deposit({ id: parseInt(id) }, data.amount);
   }
 }

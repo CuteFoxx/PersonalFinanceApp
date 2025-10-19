@@ -46,7 +46,7 @@ export class PotsService {
     return this.prisma.pot.delete({ where });
   }
 
-  async withdrawFromPot(where: Prisma.PotWhereUniqueInput, amount: number) {
+  async withdraw(where: Prisma.PotWhereUniqueInput, amount: number) {
     if (amount < 0) {
       throw new BadRequestException('Withdraw amount cannot be negative');
     }
@@ -61,7 +61,6 @@ export class PotsService {
     if (currentBalance - amount < 0) {
       throw new BadRequestException('Insufficient funds');
     }
-
     Object.assign(pot, { ...pot, balance: currentBalance - amount });
 
     return this.prisma.pot.update({
@@ -81,7 +80,6 @@ export class PotsService {
     }
 
     const currentBalance = pot.balance;
-
     Object.assign(pot, { ...pot, balance: currentBalance + amount });
 
     return this.prisma.pot.update({
