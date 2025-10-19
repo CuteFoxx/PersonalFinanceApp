@@ -12,15 +12,13 @@ import { UpdatePotDto } from './dto/update-pot.dto';
 export class PotsService {
   constructor(private prisma: PrismaService) {}
 
-  async find(): Promise<Pot[]> {
-    return this.prisma.pot.findMany({});
+  async find(where?: Prisma.PotWhereInput): Promise<Pot[]> {
+    return this.prisma.pot.findMany({ where });
   }
 
-  async findOne(
-    potWhereUniqueInput: Prisma.PotWhereUniqueInput,
-  ): Promise<Pot | null> {
+  async findOne(where: Prisma.PotWhereUniqueInput): Promise<Pot | null> {
     return this.prisma.pot.findUnique({
-      where: potWhereUniqueInput,
+      where,
     });
   }
 

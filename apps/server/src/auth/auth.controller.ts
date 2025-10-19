@@ -5,32 +5,40 @@ import {
   Post,
   UseGuards,
   Request,
+  Res,
 } from '@nestjs/common';
-import { type Request as ReqType } from 'express';
-import { UsersService } from 'src/users/users.service';
+import type { Response, Request as ReqType } from 'express';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @Bind(Request())
   @Post('login')
-  login(@Request() req: ReqType) {
+  login(@Request() req: ReqType, @Res({ passthrough: true }) res: Response) {
     if (!req.user) {
       throw new Error('User not found in request');
     }
-    return this.authService.login(req.user);
+    const payload = this.authService.login(req.user);
+
+    res.cookie('access_token', payload.access_token);
+
+    return payload;
   }
 
   @Post('signup')
-  signup(@Body() body: CreateUserDto) {
-    return this.authService.signup(body);
+  async signup(
+    @Body() body: CreateUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const payload = await this.authService.signup(body);
+
+    res.cookie('access_token', payload.access_token);
+
+    return payload;
   }
 }

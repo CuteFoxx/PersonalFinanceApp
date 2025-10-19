@@ -1,28 +1,24 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { User } from "../types/user";
 
 export interface UserState {
-  accessToken?: string | null;
+  currentUser: User | null;
 }
 
 const initialState: UserState = {
-  accessToken: localStorage.getItem("accessToken"),
+  currentUser: null,
 };
 
 export const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    setToken: (state, action: PayloadAction<string>) => {
-      state.accessToken = action.payload;
-      localStorage.setItem("accessToken", JSON.stringify(action.payload));
-    },
-    removeToken: (state) => {
-      state.accessToken = null;
-      localStorage.removeItem("accessToken");
+    setCurrentUser: (state, action: PayloadAction<User | null>) => {
+      state.currentUser = action.payload;
     },
   },
 });
 
-export const { setToken, removeToken } = userSlice.actions;
+export const { setCurrentUser } = userSlice.actions;
 
 export default userSlice.reducer;

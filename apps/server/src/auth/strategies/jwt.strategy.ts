@@ -4,6 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'generated/prisma';
+import { Request } from 'express';
 
 interface AuthJwtPayload {
   sub: string;
@@ -24,7 +25,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        (req) => JwtStrategy.ExtractJWT(req),
+      ]),
       ignoreExpiration: false,
       secretOrKey: jwtSecret,
     });
@@ -40,5 +44,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('User not found');
     }
     return { id: user.id, email: user.email };
+  }
+
+  private static ExtractJWT(req: Request): string | null {
+    const cookies = req.cookies as Record<string, unknown> | undefined;
+
+    if (cookies && typeof cookies['access_token'] === 'string') {
+      return cookies['access_token'];
+    }
+
+    return null;
   }
 }

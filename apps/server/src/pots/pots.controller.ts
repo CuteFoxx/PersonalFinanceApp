@@ -16,6 +16,7 @@ import { PotDto } from './dto/pot.dto';
 import { CreatePotDto } from './dto/create-pot.dto';
 import { UpdatePotDto } from './dto/update-pot.dto';
 import { DepostDto } from './dto/depost.dto';
+import { PotQueryDto } from './dto/pot-query.dto';
 
 @Serialize(PotDto)
 @UseGuards(JwtAuthGuard)
@@ -24,8 +25,8 @@ export class PotsController {
   constructor(private readonly potsService: PotsService) {}
 
   @Get()
-  async getAllPots() {
-    return await this.potsService.find();
+  async getAllPots(@Query() query: PotQueryDto) {
+    return await this.potsService.find(query);
   }
 
   @Get(':id')

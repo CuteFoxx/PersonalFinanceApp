@@ -11,12 +11,17 @@ import PasswordInput from "../ui/PasswordInput";
 import axios from "axios";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAppDispatch } from "../../redux/hooks";
-import { setToken } from "../../redux/userSlice";
+import { setCurrentUser } from "../../redux/userSlice";
+import type { User } from "../../types/user";
 
 const schema = z.object({
   email: z.email(),
   password: z.string().min(6),
 });
+
+interface LoginResponse extends User {
+  access_token: string;
+}
 
 type FormFileds = z.infer<typeof schema>;
 
@@ -40,7 +45,11 @@ const LoginForm = () => {
     axios
       .post("/auth/login", data)
       .then((res) => {
-        dispatch(setToken(res.data.access_token));
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { access_token: _, ...user } = res.data as LoginResponse;
+        dispatch(setCurrentUser({ ...user }));
+        console.log(res);
+
         navigate({ to: "/", replace: true });
       })
       .catch((err) => setError("root", { message: err.response.data.message }));

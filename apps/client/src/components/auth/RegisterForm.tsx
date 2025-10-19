@@ -11,7 +11,8 @@ import PasswordInput from "../ui/PasswordInput";
 import axios from "axios";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAppDispatch } from "../../redux/hooks";
-import { setToken } from "../../redux/userSlice";
+import { setCurrentUser } from "../../redux/userSlice";
+import type { User } from "../../types/user";
 
 const schema = z.object({
   name: z.string().min(3),
@@ -20,6 +21,10 @@ const schema = z.object({
 });
 
 type FormFileds = z.infer<typeof schema>;
+
+interface RegisterResponse extends User {
+  access_token: string;
+}
 
 const RegisterForm = () => {
   const emailId = useId();
@@ -42,7 +47,9 @@ const RegisterForm = () => {
     axios
       .post("/signup", data)
       .then((res) => {
-        dispatch(setToken(res.data.access_token));
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { access_token: _, ...user } = res.data as RegisterResponse;
+        dispatch(setCurrentUser({ ...user }));
         navigate({ to: "/", replace: true });
       })
       .catch((err) => setError("root", { message: err.response.data.message }));
