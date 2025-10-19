@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { Prisma, Pot } from 'generated/prisma';
 import { CreatePotDto } from './dto/create-pot.dto';
@@ -24,7 +28,7 @@ export class PotsService {
     return this.prisma.pot.create({ data });
   }
 
-  async update(where: Prisma.PotWhereUniqueInput, data: UpdatePotDto){
+  async update(where: Prisma.PotWhereUniqueInput, data: UpdatePotDto) {
     const pot = await this.prisma.pot.findUnique({ where });
     if (!pot) {
       throw new NotFoundException('Pot not found');
@@ -40,5 +44,49 @@ export class PotsService {
 
   async delete(where: Prisma.PotWhereUniqueInput) {
     return this.prisma.pot.delete({ where });
+  }
+
+  async withdrawFromPot(where: Prisma.PotWhereUniqueInput, amount: number) {
+    if (amount < 0) {
+      throw new BadRequestException('Withdraw amount cannot be negative');
+    }
+
+    const pot = await this.prisma.pot.findUnique({ where });
+    if (!pot) {
+      throw new NotFoundException('Pot not found');
+    }
+
+    const currentBalance = pot.balance;
+
+    if (currentBalance - amount < 0) {
+      throw new BadRequestException('Insufficient funds');
+    }
+
+    Object.assign(pot, { ...pot, balance: currentBalance - amount });
+
+    return this.prisma.pot.update({
+      data: pot,
+      where,
+    });
+  }
+
+  async deposit(where: Prisma.PotWhereUniqueInput, amount: number) {
+    if (amount < 0) {
+      throw new BadRequestException('Withdraw amount cannot be negative');
+    }
+
+    const pot = await this.prisma.pot.findUnique({ where });
+    if (!pot) {
+      throw new NotFoundException('Pot not found');
+    }
+
+    const currentBalance = pot.balance;
+
+    Object.assign(pot, { ...pot, balance: currentBalance + amount });
+
+    return this.prisma.pot.update({
+      data: pot,
+      where,
+    });
   }
 }

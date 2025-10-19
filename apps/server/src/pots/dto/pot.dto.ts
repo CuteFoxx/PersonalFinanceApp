@@ -6,6 +6,8 @@ export class PotDto {
   @Expose()
   name: string;
   @Expose()
+  balance: number;
+  @Expose()
   targetBalance: number;
   @Expose()
   theme: string;
