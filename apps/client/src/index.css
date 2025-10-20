@@ -35,6 +35,10 @@
   --text-preset-1--line-height: 1.2;
   --text-preset-1--font-weight: 700;
 
+  --text-preset-2: 1.25rem;
+  --text-preset-2--line-height: 1.2;
+  --text-preset-2--font-weight: 700;
+
   --text-preset-3: 1rem;
   --text-preset-3--line-height: 1.5;
   --text-preset-3--font-weight: 500;

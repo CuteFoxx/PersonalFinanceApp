@@ -1,0 +1,19 @@
+import type { Pot as PotType } from "../../types/pot";
+
+const Pot = ({ pot }: { pot: PotType }) => {
+  return (
+    <div className="bg-white rounded-xl py-6 px-5 md:px-6 flex flex-col gap-8">
+      <div>
+        <h3 className="text-preset-2">{pot.name}</h3>
+      </div>
+      <div>
+        <div className="flex justify-between">
+          <span>Total saved:</span>
+          <span className="text-preset-1">${pot.balance}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Pot;
