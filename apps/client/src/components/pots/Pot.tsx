@@ -1,4 +1,5 @@
 import type { Pot as PotType } from "../../types/pot";
+import Progressbar, { Progressfill } from "../ui/Progressbar";
 
 const Pot = ({ pot }: { pot: PotType }) => {
   return (
@@ -6,11 +7,14 @@ const Pot = ({ pot }: { pot: PotType }) => {
       <div>
         <h3 className="text-preset-2">{pot.name}</h3>
       </div>
-      <div>
-        <div className="flex justify-between">
+      <div className="flex flex-col gap-3.25 md:gap-4">
+        <div className="flex justify-between items-center">
           <span>Total saved:</span>
           <span className="text-preset-1">${pot.balance}</span>
         </div>
+        <Progressbar target={pot.targetBalance}>
+          <Progressfill fillAmount={pot.balance} />
+        </Progressbar>
       </div>
     </div>
   );
