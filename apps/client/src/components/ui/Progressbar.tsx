@@ -2,11 +2,11 @@ import type React from "react";
 import { cn } from "../../utils/utils";
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useId,
   useState,
-  type SetStateAction,
 } from "react";
 
 interface ProgressbarContextType {
@@ -42,17 +42,17 @@ export default function Progressbar({
 }: ProgressbarProps) {
   const [fills, setFills] = useState<Record<string, number>>({});
 
-  const registerFill = (id: string, amount: number) => {
+  const registerFill = useCallback((id: string, amount: number) => {
     setFills((prev) => ({ ...prev, [id]: amount }));
-  };
+  }, []);
 
-  const unregisterFill = (id: string) => {
+  const unregisterFill = useCallback((id: string) => {
     setFills((prev) => {
       const updated = { ...prev };
       delete updated[id];
       return updated;
     });
-  };
+  }, []);
 
   const totalFilled = Object.values(fills).reduce((a, b) => a + b, 0);
   const progress = Math.min(100, (totalFilled / target) * 100);
@@ -96,7 +96,7 @@ export function Progressfill({
   useEffect(() => {
     registerFill(id, fillAmount);
     return () => unregisterFill(id);
-  }, [id, fillAmount]);
+  }, [id, fillAmount, registerFill, unregisterFill]);
 
   return (
     <div

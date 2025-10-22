@@ -48,8 +48,6 @@ const LoginForm = () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { access_token: _, ...user } = res.data as LoginResponse;
         dispatch(setCurrentUser({ ...user }));
-        console.log(res);
-
         navigate({ to: "/", replace: true });
       })
       .catch((err) => setError("root", { message: err.response.data.message }));
